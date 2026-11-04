@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    // Profiles Collection
+    match /profiles/{userId} {
+      allow get: if isOwner(userId);
+      allow create, update: if isOwner(userId) && request.resource.data.email is string;
+    }
+
+    // Companies Collection
+    match /companies/{companyId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn(); // Simplified for now, will harden
+    }
+  }
+}

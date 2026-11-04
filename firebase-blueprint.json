@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Profile": {
+      "title": "Professional Profile",
+      "description": "Virginia Galindo de Benito's professional profile data.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "experience": { "type": "array", "items": { "type": "string" } },
+        "skills": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["email", "name"]
+    },
+    "Company": {
+      "title": "Target Company",
+      "description": "Companies being analyzed.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "website": { "type": "string", "format": "uri" },
+        "sector": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "Opportunity": {
+      "title": "Job Opportunity",
+      "description": "Job postings being tracked.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "companyId": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["title", "companyId"]
+    }
+  },
+  "firestore": {
+    "/profiles/{userId}": {
+      "schema": "Profile",
+      "description": "User profiles"
+    },
+    "/companies/{companyId}": {
+      "schema": "Company",
+      "description": "Target companies"
+    }
+  }
+}
